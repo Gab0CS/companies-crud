@@ -2,10 +2,10 @@ package com.gabo.companies_crud.entities;
 
 public enum Category {
     SOCIAL_NETWORK,
+    CLOUD_COMPUTING,
     SERVICES,
     STREAMING,
-    CLOUD_COMPUTING,
-    DELIVERIES, 
+    DEVICES,
     EDUCATION,
     NONE
 }

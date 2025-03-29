@@ -13,11 +13,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.Data;
 
+
 @Entity
-@Table(name = "company") //Si la tabla tiene un nombre distinto a la clase necesito esta anotación
 @Data //Getters, setters, contructor, toString, equals y hashCode
 public class Company {
     
@@ -32,5 +31,5 @@ public class Company {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE} )
     @JoinColumn(name = "id_company", referencedColumnName = "id")
-    private List<Website> websites;
+    private List<WebSite> webSites;
 }

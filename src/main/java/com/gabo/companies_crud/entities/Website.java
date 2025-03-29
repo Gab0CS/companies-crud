@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Website implements Serializable {
+public class WebSite implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
