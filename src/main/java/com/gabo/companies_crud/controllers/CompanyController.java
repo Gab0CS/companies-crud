@@ -33,6 +33,11 @@ public class CompanyController {
     @Operation(summary = "get a company providing a name")
     @GetMapping(path = "{name}")
     public ResponseEntity<Company> get(@PathVariable String name){
+        // try {
+        //     Thread.sleep(7000);          
+        // } catch (Exception e) {
+        //     throw new RuntimeException(e);
+        // }
         log.info("GET: Company {}" ,name);
         return ResponseEntity.ok(this.companyService.readByName(name));
     }
