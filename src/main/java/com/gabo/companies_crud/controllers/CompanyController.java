@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gabo.companies_crud.entities.Company;
 import com.gabo.companies_crud.services.CompanyService;
 
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.observation.annotation.Observed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -32,18 +34,17 @@ public class CompanyController {
 
     @Operation(summary = "get a company providing a name")
     @GetMapping(path = "{name}")
+    @Observed(name = "company.name")
+    @Timed(value = "company.name")
     public ResponseEntity<Company> get(@PathVariable String name){
-        // try {
-        //     Thread.sleep(7000);          
-        // } catch (Exception e) {
-        //     throw new RuntimeException(e);
-        // }
         log.info("GET: Company {}" ,name);
         return ResponseEntity.ok(this.companyService.readByName(name));
     }
 
     @Operation(summary = "Save a company providing a company body")
     @PostMapping
+    @Observed(name = "company.post")
+    @Timed(value = "company.post")
     public ResponseEntity<Company> post(@RequestBody Company company){
         log.info("POST: Company {}" ,company.getName());
         

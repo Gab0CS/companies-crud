@@ -10,6 +10,7 @@ import com.gabo.companies_crud.entities.Category;
 import com.gabo.companies_crud.entities.Company;
 import com.gabo.companies_crud.repositories.CompanyRepository;
 
+import io.micrometer.tracing.Tracer;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final Tracer tracer;
 
     @Override
     public Company create(Company company) {
@@ -36,6 +38,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company readByName(String name) {
+        var span = tracer.nextSpan().name("readByName");
+        try (Tracer.SpanInScope spanInScope = this.tracer.withSpan(span.start())) {
+            log.info("Getting company from DB");
+        } finally {
+            span.end();
+        }
         return this.companyRepository.findByName(name)
         .orElseThrow(() -> new NoSuchElementException("Company not found"));
     }

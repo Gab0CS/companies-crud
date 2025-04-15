@@ -26,6 +26,7 @@ import io.opentelemetry.sdk.logs.SdkLoggerProvider;
 import io.opentelemetry.sdk.logs.export.BatchLogRecordProcessor;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.semconv.ResourceAttributes;
 
 
 @Configuration(proxyBeanMethods = false)
@@ -36,16 +37,15 @@ public class ObserverBeans {
         return new ObservedAspect(observationRegistry);
     }
 
+    @SuppressWarnings("deprecation")
     @Bean
-    public SdkLoggerProvider openTelemetry(Environment env, ObjectProvider<LogRecordProcessor> processor){
-        var applicationName = env.getProperty("spring.application.name", "application");
-        var springResource = Resource.create(Attributes.of(io.opentelemetry.semconv.ServiceAttributes.SERVICE_NAME, applicationName));
+    public SdkLoggerProvider otelSdkLoggerProvider(Environment env, ObjectProvider<LogRecordProcessor> processor) {
+        var applicationName = env.getProperty("spring.application.name:", "application");
+        var springResource = Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, applicationName));
         var builder = SdkLoggerProvider.builder()
-            .setResource(Resource.getDefault().merge(springResource));
+                .setResource(Resource.getDefault().merge(springResource));
         processor.orderedStream().forEach(builder::addLogRecordProcessor);
-
         return builder.build();
-        
     }
 
     @Bean
